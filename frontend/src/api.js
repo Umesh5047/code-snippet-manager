@@ -1,25 +1,18 @@
 import axios from "axios";
 
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:5000/api",
+});
 
-export const getSnippets = async () => {
-  const res = await axios.get(`${API_BASE}/snippets`);
-  return res.data;
-};
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-export const createSnippet = async (snippet, token) => {
-  const res = await axios.post(`${API_BASE}/snippets`, snippet, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  return res.data;
-};
-
-export const registerUser = async (user) => {
-  const res = await axios.post(`${API_BASE}/auth/register`, user);
-  return res.data;
-};
-
-export const loginUser = async (user) => {
-  const res = await axios.post(`${API_BASE}/auth/login`, user);
-  return res.data;
-};
+export const getSnippets = () => api.get("/snippets").then(res => res.data);
+export const createSnippet = (snippet) => api.post("/snippets", snippet).then(res => res.data);
+export const registerUser = (user) => api.post("/auth/register", user).then(res => res.data);
+export const loginUser = (user) => api.post("/auth/login", user).then(res => res.data);

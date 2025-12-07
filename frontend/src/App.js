@@ -1,21 +1,26 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SnippetList from "./components/SnippetList";
-import SnippetForm from "./components/SnippetForm";
-import Login from "./components/Login";
-import Register from "./components/Register";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import CreateSnippet from "./pages/CreateSnippet";
 
 function App() {
   return (
-    <BrowserRouter>
-      <h1>Code Snippet Manager</h1>
+    <Router>
+      <nav style={{ padding: "1rem", background: "#eee" }}>
+        <Link to="/">Home</Link> |{" "}
+        <Link to="/create">Create Snippet</Link> |{" "}
+        <Link to="/login">Login</Link> |{" "}
+        <Link to="/register">Register</Link>
+      </nav>
       <Routes>
-        <Route path="/" element={<SnippetList />} />
-        <Route path="/new" element={<SnippetForm />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/create" element={<CreateSnippet />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
